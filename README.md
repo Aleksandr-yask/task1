@@ -1,3 +1,9 @@
+PHP 7.4
+Mysql 8
+
+```code
+composer install
+```
 Добавление номеров
 
 ```curl
