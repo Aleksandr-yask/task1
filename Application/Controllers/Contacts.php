@@ -33,7 +33,7 @@ class ControllersContacts extends Controller
     public function addContacts(): void
     {
         $source = (int) $this->data['source_id'];
-        $notAddedNumbers = [];
+        $now = time();
 
         foreach ($this->data['items'] as $item) {
             if (!filter_var($item['email'], FILTER_VALIDATE_EMAIL))
@@ -47,16 +47,20 @@ class ControllersContacts extends Controller
             }
             $item['phone'] = (int) $swissNumberProto->getNationalNumber();
 
-            $now = time();
+
             if ($this->model->isContactAdded($item['phone'], $source, $now))
                 throw new Exception("Номер $item[phone] уже был добавлен в течении последних 24 часов, ни один из номеров не добавлен", 400);
 
+        }
 
+
+        $notAddedNumbers = [];
+        foreach ($this->data['items'] as $item) {
             if (!$this->model->addContact($item['name'], $item['phone'], $item['email'], $source, $now)) {
                 $notAddedNumbers[] = $item['phone'];
             }
-
         }
+
 
         if (count($notAddedNumbers) > 0) {
             $this->response->sendStatus(200);
