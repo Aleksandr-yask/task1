@@ -35,7 +35,7 @@ class ControllersContacts extends Controller
         $source = (int) $this->data['source_id'];
         $now = time();
 
-        foreach ($this->data['items'] as $item) {
+        foreach ($this->data['items'] as $key => $item) {
             if (!filter_var($item['email'], FILTER_VALIDATE_EMAIL))
                 throw new Exception("Email $item[email] не корректен, ни один номер не записан", 400);
 
@@ -46,7 +46,7 @@ class ControllersContacts extends Controller
                 throw new Exception("Номер телефона $item[phone] не корректен, ни один номер не записан", 400);
             }
             $item['phone'] = (int) $swissNumberProto->getNationalNumber();
-
+            $this->data['items'][$key]['phone'] = $item['phone'];
 
             if ($this->model->isContactAdded($item['phone'], $source, $now))
                 throw new Exception("Номер $item[phone] уже был добавлен в течении последних 24 часов, ни один из номеров не добавлен", 400);
