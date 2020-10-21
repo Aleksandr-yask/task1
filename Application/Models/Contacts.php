@@ -25,7 +25,7 @@ class ModelsContacts extends Model
             'email' => $email,
             'sourceId' => $sourceId,
             'time' => $time
-            ]);
+        ]);
         return $res ? true : false;
     }
 
@@ -52,7 +52,7 @@ class ModelsContacts extends Model
 
     public function getByNumber(int $num)
     {
-        return $this->db->row("select * from contacts where phone = :phone", ['phone' => $num]);
+        return $this->db->row("select name, phone, email, source_id, add_time from contacts where phone = :phone", ['phone' => $num]);
     }
 
 }
